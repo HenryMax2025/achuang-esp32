@@ -1,0 +1,228 @@
+#
+# 阿闯 (Achuang) AI 语音机器人 - Kconfig 配置
+#
+
+menu "阿闯助手配置"
+
+config OTA_URL
+    string "默认 OTA 固件服务器地址"
+    default "https://api.achuang.ai/ota/"
+    help
+        设备将访问此 URL 检查新固件和服务器地址。
+
+choice
+    prompt "Flash 资源文件"
+    default FLASH_DEFAULT_ASSETS if !USE_EMOTE_MESSAGE_STYLE
+    default FLASH_EXPRESSION_ASSETS if USE_EMOTE_MESSAGE_STYLE
+    help
+        选择要烧录的资源文件。
+
+    config FLASH_NONE_ASSETS
+        bool "不烧录资源文件"
+    config FLASH_DEFAULT_ASSETS
+        bool "烧录默认资源文件"
+        depends on !USE_EMOTE_MESSAGE_STYLE
+    config FLASH_CUSTOM_ASSETS
+        bool "烧录自定义资源文件"
+    config FLASH_EXPRESSION_ASSETS
+        bool "烧录表情资源文件"
+        depends on USE_EMOTE_MESSAGE_STYLE
+endchoice
+
+config CUSTOM_ASSETS_FILE
+    depends on FLASH_CUSTOM_ASSETS
+    string "自定义资源文件"
+    default "assets.bin"
+    help
+        自定义资源文件路径，可以是本地文件或远程 URL。
+
+choice
+    prompt "默认语言"
+    default LANGUAGE_ZH_CN
+    help
+        选择设备显示语言
+
+    config LANGUAGE_ZH_CN
+        bool "中文简体"
+    config LANGUAGE_ZH_TW
+        bool "中文繁体"
+    config LANGUAGE_EN_US
+        bool "English"
+    config LANGUAGE_JA_JP
+        bool "日本語"
+endchoice
+
+# ========== 开发板配置 ==========
+choice BOARD_TYPE
+    prompt "开发板类型"
+    default BOARD_TYPE_BREAD_COMPACT_WIFI
+    help
+        选择开发板类型
+
+    # 面包板方案
+    config BOARD_TYPE_BREAD_COMPACT_WIFI
+        bool "面包板 WiFi (面包板)"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_BREAD_COMPACT_WIFI_LCD
+        bool "面包板 WiFi + LCD (面包板)"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_BREAD_COMPACT_WIFI_CAM
+        bool "面包板 WiFi + LCD + 摄像头 (面包板)"
+        depends on IDF_TARGET_ESP32S3     
+
+    # ESP32-C3 系列
+    config BOARD_TYPE_XMINI_C3_V3
+        bool "Xmini C3 V3"
+        depends on IDF_TARGET_ESP32C3
+    config BOARD_TYPE_XMINI_C3
+        bool "Xmini C3"
+        depends on IDF_TARGET_ESP32C3
+
+    # 乐鑫官方
+    config BOARD_TYPE_ESP_BOX_3
+        bool "乐鑫 ESP-BOX-3"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_ESP_BOX
+        bool "乐鑫 ESP-BOX"
+        depends on IDF_TARGET_ESP32S3
+
+    # M5Stack
+    config BOARD_TYPE_M5STACK_CORE_S3
+        bool "M5Stack CoreS3"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_M5STACK_ATOM_S3_ECHO_BASE
+        bool "M5Stack AtomS3 + Echo Base"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_M5STACK_ATOM_S3R_ECHO_BASE
+        bool "M5Stack AtomS3R + Echo Base"
+        depends on IDF_TARGET_ESP32S3
+
+    # 立创
+    config BOARD_TYPE_LICHUANG_DEV_S3
+        bool "立创·实战派 ESP32-S3"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_LICHUANG_DEV_C3
+        bool "立创·实战派 ESP32-C3"
+        depends on IDF_TARGET_ESP32C3
+
+    # Waveshare
+    config BOARD_TYPE_WAVESHARE_ESP32_S3_TOUCH_AMOLED_1_8
+        bool "Waveshare ESP32-S3-Touch-AMOLED-1.8"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_WAVESHARE_ESP32_S3_TOUCH_LCD_1_83
+        bool "Waveshare ESP32-S3-Touch-LCD-1.83"
+        depends on IDF_TARGET_ESP32S3
+
+    # LILYGO
+    config BOARD_TYPE_LILYGO_T_CIRCLE_S3
+        bool "LILYGO T-Circle-S3"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_LILYGO_T_DISPLAY_P4
+        bool "LILYGO T-Display-S3 P4"
+        depends on IDF_TARGET_ESP32P4
+
+    # Seeed
+    config BOARD_TYPE_SEEED_STUDIO_SENSECAP_WATCHER
+        bool "Seeed Studio SenseCAP Watcher"
+        depends on IDF_TARGET_ESP32S3
+
+    # 神奇按钮
+    config BOARD_TYPE_MAGICLICK_S3_2P4
+        bool "神奇按钮 Magiclick_2.4"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_MAGICLICK_C3
+        bool "神奇按钮 Magiclick_C3"
+        depends on IDF_TARGET_ESP32C3
+
+    # ESP32-P4
+    config BOARD_TYPE_ESP_P4_FUNCTION_EV_BOARD
+        bool "乐鑫 ESP-P4-Function-EV-Board"
+        depends on IDF_TARGET_ESP32P4
+
+    # 其他
+    config BOARD_TYPE_ESP_KORVO2_V3
+        bool "乐鑫 Korvo2 V3"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_ESP_S3_LCD_EV_Board
+        bool "乐鑫 ESP S3 LCD EV Board"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_DF_K10
+        bool "DFRobot 行空板 k10"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_DU_CHATX
+        bool "嘟嘟开发板 CHATX"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_YUNLIAO_S3
+        bool "小智云聊-S3"
+        depends on IDF_TARGET_ESP32S3
+
+    # 正点原子
+    config BOARD_TYPE_ATK_DNESP32S3
+        bool "正点原子 DNESP32S3 开发板"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_ATK_DNESP32S3_BOX
+        bool "正点原子 DNESP32S3-BOX"
+        depends on IDF_TARGET_ESP32S3
+endchoice
+
+# ========== 音频配置 ==========
+choice AUDIO_INPUT_SAMPLE_RATE
+    prompt "音频输入采样率"
+    default AUDIO_INPUT_SAMPLE_RATE_16000
+    help
+        麦克风音频采样率
+
+    config AUDIO_INPUT_SAMPLE_RATE_16000
+        bool "16000 Hz"
+    config AUDIO_INPUT_SAMPLE_RATE_32000
+        bool "32000 Hz"
+    config AUDIO_INPUT_SAMPLE_RATE_48000
+        bool "48000 Hz"
+endchoice
+
+# ========== 显示配置 ==========
+choice DISPLAY_TYPE
+    prompt "显示屏类型"
+    default DISPLAY_TYPE_NONE
+    help
+        选择显示屏类型
+
+    config DISPLAY_TYPE_NONE
+        bool "无显示屏"
+    config DISPLAY_TYPE_OLED_SSD1306
+        bool "OLED SSD1306"
+    config DISPLAY_TYPE_LCD_ST7789
+        bool "LCD ST7789"
+    config DISPLAY_TYPE_LCD_ILI9341
+        bool "LCD ILI9341"
+endchoice
+
+# ========== 网络配置 ==========
+choice NETWORK_TYPE
+    prompt "网络连接类型"
+    default NETWORK_TYPE_WIFI
+    help
+        选择网络连接方式
+
+    config NETWORK_TYPE_WIFI
+        bool "Wi-Fi"
+    config NETWORK_TYPE_4G_ML307
+        bool "4G (ML307)"
+    config NETWORK_TYPE_4G_EC801E
+        bool "4G (EC801E)"
+endchoice
+
+# ========== 通信协议 ==========
+choice PROTOCOL_TYPE
+    prompt "通信协议"
+    default PROTOCOL_TYPE_WEBSOCKET
+    help
+        选择与服务器通信的协议
+
+    config PROTOCOL_TYPE_WEBSOCKET
+        bool "WebSocket (推荐)"
+    config PROTOCOL_TYPE_MQTT
+        bool "MQTT + UDP"
+endchoice
+
+endmenu
